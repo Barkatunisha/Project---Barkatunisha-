@@ -1,0 +1,66 @@
+--Creation of database and tables
+
+CREATE DATABASE student_database;
+
+CREATE TABLE student_table (
+Student_id INT,
+Stu_name text,
+Department text,
+email_id text,
+Phone_no numeric,
+Address text,
+Date_of_birth date,
+Gender text,
+Major text,
+GPA numeric,
+Grade text
+);
+
+
+INSERT INTO student_table (Student_id,Stu_name,Department,email_id,Phone_no,Address,Date_of_birth,Gender,Major,GPA,Grade) 
+VALUES 
+(1, 'Nisha','BCA','nisha@gmail.com',8923145678,'Royapettah','1993-09-11','Female','Computer',5,'A'),
+(2,'Isha','Bsc','isha@gmail.com',8956782390,'Annanagar','1992-06-05','Female','Maths',4,'B'),
+(3,'Suhail','Bcom','suhail@gmail.com',8956249056,'Kilpauk','1992-04-12','Male','Commerce',3,'C'),
+(4,'Malathi','BCA','malathi@gmail.com',7988563498,'Teynampet','1993-05-04','Female','Computer',2.8,'D'),
+(5,'Raja','Bcom','raja@@gmail.com',8945273897,'Alwarpet','1991-12-18','Male','Commerce',3.9,'C'),
+(6,'Preeti','BA','preeti@gmail.com',8956282490,'Tambaram','1994-09-13','Female','English',5,'A'),
+(7,'Razack','BA','razack@gmail.com',8946729373,'Royapettah','1993-07-17','Male','Tamil',2,'D'),
+(8,'Kannan','Bsc','kannan@gmail.com',7956290423,'Kilpauk','1992-03-19','Male','Maths',4,'B'),
+(9,'Arun','BA','arun@gmail.com',8945207812,'Tambaram','1992-04-08','Male','English',3,'C'),
+(10,'Priya','Bsc','priya@gmail.com',7900346781,'Alwarpet','1994-09-15','Female','Maths',1,'F');
+
+--Retreive all students information
+SELECT * FROM student_table 
+ORDER BY Grade DESC;
+	 
+--Query for male students
+SELECT * FROM student_table
+WHERE Gender = 'Male';
+	 
+--Query for students with GPA less than 5.0
+SELECT * FROM student_table
+WHERE GPA < 5.0;
+	
+--Update Student email and grade     
+UPDATE student_table
+SET email_id = 'razack17@yahoo.com' , Grade = 'C'
+WHERE student_id = 7;
+	 
+--Names and ages of all students with grade b
+SELECT Stu_name, EXTRACT ( year FROM AGE(CURRENT_DATE,Date_of_birth) ) AS age 
+FROM student_table
+WHERE Grade = 'B';
+
+--Grouping and calculation	 
+SELECT Department,Gender,AVG(GPA) AS average_gpa  
+FROM student_table
+GROUP BY Department,Gender;
+	 
+--Table renaming    
+ALTER TABLE student_table
+RENAME TO student_info;
+
+--Highest GPA	 
+SELECT MAX(gpa) AS Highest_GPA
+FROM student_info; 

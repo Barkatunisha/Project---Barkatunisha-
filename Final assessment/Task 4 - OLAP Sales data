@@ -1,0 +1,49 @@
+--Database and tables creation
+ 
+Create database Sales_data;
+Create TABLE sales_sample ( 
+Product_Id INT,
+Region VARCHAR(50),
+Date DATE,
+Sales_Amount INT
+);
+
+INSERT INTO sales_sample (Product_Id,Region,Date,Sales_Amount)
+VALUES
+(1,'East','2023-07-04',200000),
+(2,'West','2023-06-29',500000),
+(3,'North','2023-05-18',255000),
+(4,'South','2023-04-03',400000),
+(2,'East','2023-06-20',100000),
+(3,'West','2023-05-07',365000),
+(1,'North','2023-03-09',632000),
+(3,'South','2023-07-01',145000),
+(4,'East','2023-01-28',322000),
+(1,'West','2023-02-09',534000);
+
+--Drill Down
+SELECT Region, Product_Id, SUM ( Sales_Amount) AS total_sales
+FROM sales_sample
+GROUP BY Region,Product_Id;
+
+--Rollup
+SELECT region, SUM ( Sales_Amount) AS total_sales
+FROM sales_sample
+GROUP BY ROLLUP (Region);
+
+--Cube
+SELECT Product_Id,Region,Date,SUM(Sales_Amount) As Total_Sales
+FROM sales_sample
+GROUP BY CUBE (Product_Id,Region,Date)
+Having (Product_Id IS NOT NULL AND Region IS NOT NULL AND Date IS NOT NULL);
+
+--Slice
+SELECT Product_Id,Region,Date,SUM(Sales_Amount) As Total_Sales
+FROM sales_sample
+WHERE Region = 'East'
+GROUP BY Product_id,Region,Date;
+
+--Dice
+SELECT Product_Id,Region,Date,Sales_Amount
+FROM sales_sample
+WHERE Product_id = 1 AND Region = 'North' and Date = '2023-03-09';

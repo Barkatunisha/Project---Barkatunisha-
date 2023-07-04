@@ -1,0 +1,102 @@
+CREATE DATABASE EventsManagement;
+ 
+CREATE TABLE Events ( 
+Event_Id INT PRIMARY KEY,
+Event_Name text,
+Event_Date date,
+Event_Location text,
+Event_Description text
+);
+CREATE TABLE Attendees (
+Attendee_Id INT PRIMARY KEY,
+Attendee_Name text,
+Attendee_Phone numeric,
+Attendee_Email text,
+Attendee_City text
+);
+CREATE TABLE Registrations (
+Registration_Id INT PRIMARY KEY,
+Event_id INT,
+Attendee_ID INT,
+Registration_Date date,
+Registration_Amount numeric,
+FOREIGN KEY (Event_Id) REFERENCES Events(Event_Id),
+FOREIGN KEY (Attendee_Id) REFERENCES Attendees(Attendee_Id) 
+);
+
+INSERT INTO Events (Event_Id,Event_Name,Event_Date,Event_Location,Event_Description)
+VALUES 
+(1,'Phonics_Workshop','2023-07-18','Royapettah','Phonics workshop for kids'),
+(2,'Pottery_Workshop','2023-08-05','Teynampet','Pottery Training workshop for all ages'),
+(3,'Makeup_Masterclass','2023-09-16','Kilpauk','One day makeup masterclass');
+
+INSERT INTO Attendees (Attendee_Id, Attendee_Name,Attendee_Phone,Attendee_Email,
+Attendee_City) VALUES 
+(1,'Nisha',8930367834,'nisha@gmail.com', 'Chennai'),
+(2,'Isha',7934649221,'isha@gmail.com','Coimbatore'),
+(3,'Arun',8516349045,'arun@gmail.com','Trichy'),
+(4,'Mala',8904781290,'mala@gmail.com','Chennai'),
+(5,'Raja',7890452829,'raja@gmail.com','Karur'),
+(6,'Priya',7903678901,'priya@gmail.com','Chennai');
+
+INSERT INTO Registrations (Registration_Id,Event_Id,Attendee_ID,Registration_Date,
+Registration_Amount)
+VALUES
+(1,1,1,'2023-07-01',500),
+(2,1,2,'2023-07-02',500),
+(3,2,3,'2023-07-01',300),
+(4,2,4,'2023-07-03',300),
+(5,3,5,'2023-07-04',1000),
+(6,3,6,'2023-07-02',1000);
+
+INSERT INTO Events (Event_Id,Event_Name,Event_Date,Event_Location,Event_Description)
+VALUES (4,'Photography_Workshop','2023-07-30','Chennai','Learn Photography and Retouching');
+INSERT INTO Attendees (Attendee_Id, Attendee_Name,Attendee_Phone,Attendee_Email,Attendee_City) 
+VALUES (7,'Lokesh',8930356796,'lokesh@gmail.com', 'Chennai');
+INSERT INTO Registrations (Registration_Id,Event_Id,Attendee_ID,Registration_Date,Registration_Amount) 
+VALUES (7,4,7,'2023-07-04',200);
+
+Update Events
+SET Event_Date = '2023-07-29'
+WHERE Event_Id = 1;
+
+DELETE FROM Registrations
+WHERE Event_id = 3;
+
+DELETE FROM Attendees 
+WHERE Attendee_ID IN (
+SELECT Attendee_Id FROM Registrations WHERE Event_Id = 3);
+
+DELETE FROM Events
+WHERE Event_ID = 3;
+
+INSERT INTO Attendees (Attendee_Id, Attendee_Name,Attendee_Phone,Attendee_Email,
+Attendee_City) VALUES 
+(8,'Fahim',8935372496,'fahim@gmail.com', 'Trichy');
+INSERT INTO Registrations (Registration_Id,Event_Id,Attendee_ID,Registration_Date,
+Registration_Amount)
+VALUES
+(8,1,8,'2023-07-01',500);
+
+INSERT INTO Attendees (Attendee_Id, Attendee_Name,Attendee_Phone,Attendee_Email,
+Attendee_City) VALUES 
+(9,'Zayn',9883467345,'zayn@gmail.com', 'Chennai');
+INSERT INTO Registrations (Registration_Id,Event_Id,Attendee_ID,Registration_Date,
+Registration_Amount)
+VALUES
+(9,4,9,'2023-07-02',200);
+
+SELECT Event_id,Event_Name,Event_Date,Event_Location,Event_Description
+FROM Events;
+
+SELECT e.Event_Id,e.Event_Name,a.Attendee_Id,a.Attendee_Name,a.Attendee_Phone,a.Attendee_Email,a.Attendee_City
+FROM Events e
+JOIN Registrations r ON e.Event_Id = r.Event_Id
+JOIN Attendees a ON r.Attendee_Id = a.Attendee_Id;
+
+SELECT e.Event_id,e.Event_name,COUNT(r.Attendee.Id) AS total
+FROM Events e
+LEFT JOIN Registrations r ON e.Event_Id = R.Event_Id
+GROUP BY e.event_id,e.Event_Name
+
+	
